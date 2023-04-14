@@ -9,7 +9,7 @@ backup_path =  (dirpath+"/Backup")
 #product_id = ["cmems_mod_glo_phy_anfc_0.083deg_PT1H-m","cmems_mod_glo_phy-cur_anfc_0.083deg_PT6H-i","cmems_mod_glo_phy-so_anfc_0.083deg_PT6H-i","cmems_mod_glo_phy-thetao_anfc_0.083deg_PT6H-i"]
 
 #10-days forecast (daily mean)
-product_id = ["cmems_mod_glo_phy_anfc_0.083deg_P1D-m","cmems_mod_glo_phy-cur_anfc_0.083deg_P1D-m","cmems_mod_glo_phy-so_anfc_0.083deg_P1D-m","cmems_mod_glo_phy-thetao_anfc_0.083deg_P1D-m"]
+product_id = ["cmems_mod_glo_phy-cur_anfc_0.083deg_P1D-m","cmems_mod_glo_phy-so_anfc_0.083deg_P1D-m","cmems_mod_glo_phy-thetao_anfc_0.083deg_P1D-m","cmems_mod_glo_phy_anfc_0.083deg_P1D-m"]
 
 input_convert_file_name = ["ConvertToHDF5Action_zos.dat","ConvertToHDF5Action_cur.dat","ConvertToHDF5Action_so.dat","ConvertToHDF5Action_thetao.dat"]
 
@@ -39,6 +39,7 @@ start_depth = "0.494"
 end_depth = "5727.9171"
 output_file_name = "CMEMS"
 
+clean_null_values = 1
 #Tempo de espera para uma nova tentativa de download do arquivo (em segundos)
 wait_time = 300
 #Tempo de espera total em s para o download do arquivo (em segundos) 

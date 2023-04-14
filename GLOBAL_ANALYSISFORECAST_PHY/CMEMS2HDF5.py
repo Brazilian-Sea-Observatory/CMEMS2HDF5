@@ -4,7 +4,8 @@ import time
 import glob, os, shutil
 import subprocess
 from Input_CMEMS2HDF5 import *
-
+import h5py
+import numpy as np
 #####################################################
 def next_date (run):
         global next_start_date
@@ -72,6 +73,17 @@ def telegram_msg(message):
                 urlbot = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={chat_id}&text={message}"
                 print(requests.get(urlbot).json()) # this sends the message
 #####################################################
+def nullvalues2fillvalues(var_name):
+    
+    group = hdf["Results/" + var_name]
+    for i in range (1,4):
+        instant = '{:05d}'.format(int(i))
+        var = group[(var_name + "_"+str(instant))]
+        np_var = np.array(var)
+        #replace all elements equal to 0.0 with a fill value
+        np_var[np_var < 0.1] = -9899999475269632
+        var[...] = np_var    
+#####################################################
 
 if forecast_mode == 1:
 
@@ -120,7 +132,22 @@ for run in range (0,number_of_runs):
                 print(msg)
                 telegram_msg(msg) 
                 exit()
-         
+        
+        if (clean_null_values == 1):
+            files = glob.glob("*.hdf*")    
+            for file in files:
+                
+                if file == "CMEMS_thetao.hdf5":
+                    hdf = h5py.File(file, 'r+')
+                    var_name = "temperature"
+                    nullvalues2fillvalues(var_name)
+                    hdf.close()    
+                elif file == "CMEMS_so.hdf5":
+                    hdf = h5py.File(file, 'r+')
+                    var_name = "salinity"
+                    nullvalues2fillvalues(var_name)
+                    hdf.close()
+            
         output_dir = backup_path+"//"+str(next_start_date.strftime("%Y%m%d")) + "_" + str(next_end_date.strftime("%Y%m%d"))
             
         if not os.path.exists(output_dir):
